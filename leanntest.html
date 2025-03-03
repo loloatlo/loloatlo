@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Speech Therapy App Questionnaire</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f9f9f9;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .option {
+      margin-right: 10px;
+    }
+    .submit-button {
+      background: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Help us understand your child's speech development</h1>
+    <p>Please answer a few quick questions to help us tailor our speech therapy app for your child.</p>
+    <form id="questionnaireForm">
+      <!-- Question 1: Child's Age -->
+      <div class="question">
+        <label for="age">How old is your child?</label>
+        <select id="age" name="age" required onchange="handleAgeChange()">
+          <option value="">Select age range</option>
+          <option value="under12">Under 12 months</option>
+          <option value="12to18">12-18 months</option>
+          <option value="18to24">18-24 months</option>
+          <option value="2to3">2-3 years</option>
+          <option value="over3">Over 3 years</option>
+        </select>
+      </div>
+
+      <!-- Question 2: Understanding -->
+      <div class="question">
+        <label>
+          Does your child appear to understand what you are saying
+          (e.g., can follow simple instructions or point to things you name)?
+        </label>
+        <input type="radio" id="understandYes" name="understands" value="yes" class="option" required>
+        <label for="understandYes" style="display:inline;">Yes</label>
+        <input type="radio" id="understandNo" name="understands" value="no" class="option">
+        <label for="understandNo" style="display:inline;">No</label>
+      </div>
+
+      <!-- Question 3: Talking -->
+      <div class="question">
+        <label>Is your child talking?</label>
+        <input type="radio" id="talkingNo" name="talking" value="no" class="option" required onclick="handleTalkingChange()">
+        <label for="talkingNo" style="display:inline;">Not yet</label>
+        <input type="radio" id="talkingSingle" name="talking" value="single" class="option" onclick="handleTalkingChange()">
+        <label for="talkingSingle" style="display:inline;">Using single words</label>
+        <input type="radio" id="talkingShort" name="talking" value="short" class="option" onclick="handleTalkingChange()">
+        <label for="talkingShort" style="display:inline;">Using short phrases</label>
+        <input type="radio" id="talkingSentences" name="talking" value="sentences" class="option" onclick="handleTalkingChange()">
+        <label for="talkingSentences" style="display:inline;">Using sentences</label>
+      </div>
+
+      <!-- Additional question shown only if the child is talking -->
+      <div id="additionalQuestions" class="hidden">
+        <div class="question">
+          <label>Is it difficult to understand your child’s speech?</label>
+          <input type="radio" id="speechClearNo" name="speechClear" value="no" class="option" required>
+          <label for="speechClearNo" style="display:inline;">No</label>
+          <input type="radio" id="speechClearYes" name="speechClear" value="yes" class="option">
+          <label for="speechClearYes" style="display:inline;">Yes</label>
+        </div>
+      </div>
+
+      <!-- Question 4: Nonverbal Communication -->
+      <div class="question">
+        <label>
+          Is your child communicating with you without words
+          (e.g., pointing to things they want or are interested in)?
+        </label>
+        <input type="radio" id="nonVerbalYes" name="nonVerbal" value="yes" class="option" required>
+        <label for="nonVerbalYes" style="display:inline;">Yes</label>
+        <input type="radio" id="nonVerbalNo" name="nonVerbal" value="no" class="option">
+        <label for="nonVerbalNo" style="display:inline;">No</label>
+      </div>
+
+      <!-- Question 5: Social Play -->
+      <div class="question">
+        <label>Does your child like to play with others?</label>
+        <input type="radio" id="playYes" name="play" value="yes" class="option" required>
+        <label for="playYes" style="display:inline;">Yes</label>
+        <input type="radio" id="playNo" name="play" value="no" class="option">
+        <label for="playNo" style="display:inline;">No</label>
+      </div>
+
+      <!-- Additional Information Question (not used for programme allocation) -->
+      <div class="question">
+        <label>Does your child get frustrated at not being able to communicate?</label>
+        <input type="radio" id="frustratedYes" name="frustrated" value="yes" class="option" required>
+        <label for="frustratedYes" style="display:inline;">Yes</label>
+        <input type="radio" id="frustratedNo" name="frustrated" value="no" class="option">
+        <label for="frustratedNo" style="display:inline;">No</label>
+      </div>
+
+      <!-- Email Sign-up -->
+      <div class="question">
+        <label for="email">Enter your email to get early access:</label>
+        <input type="email" id="email" name="email" required placeholder="you@example.com" style="width:100%; padding:8px;">
+      </div>
+
+      <button type="submit" class="submit-button">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    function handleTalkingChange() {
+      var talkingValue = document.querySelector('input[name="talking"]:checked').value;
+      var additionalQuestions = document.getElementById('additionalQuestions');
+      // If the child is talking (any answer except "Not yet"), show the additional question.
+      if (talkingValue !== 'no') {
+        additionalQuestions.classList.remove('hidden');
+        document.getElementById('speechClearNo').required = true;
+      } else {
+        additionalQuestions.classList.add('hidden');
+        document.getElementById('speechClearNo').required = false;
+        document.getElementById('speechClearYes').required = false;
+      }
+    }
+
+    function handleAgeChange() {
+      // Future conditional logic based on age selection can be added here.
+    }
+
+    document.getElementById('questionnaireForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      // Here you can collect and send form data to your backend or API.
+      alert('Thank you for signing up and providing your information!');
+      
+      // Optionally, log form data for debugging.
+      var formData = new FormData(this);
+      var output = {};
+      formData.forEach((value, key) => {
+        output[key] = value;
+      });
+      console.log(output);
+      
+      // You can now clear the form or redirect the user, etc.
+    });
+  </script>
+</body>
+</html>
